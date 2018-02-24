@@ -28,6 +28,9 @@ fi
 
 SQL="select column_name from information_schema.columns where table_name='${TABLE}' order by column_name;"
 
+if [ -f routes.txt ]; then
+  rm -f routes.txt
+fi
 for i in `echo $SQL | psql -h ${HOST} -U ${USR} --set ON_ERROR_STOP=on ${DB} --tuples-only`; do 
 cat << EOF >> routes.txt
 @app.route('${TABLE}/${i}/{${i}}')

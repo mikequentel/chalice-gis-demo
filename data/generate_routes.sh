@@ -28,4 +28,16 @@ fi
 
 SQL="select column_name from information_schema.columns where table_name='${TABLE}' order by column_name;"
 
-echo $SQL | psql -h ${HOST} -U ${USR} --set ON_ERROR_STOP=on ${DB} --tuples-only
+for i in `echo $SQL | psql -h ${HOST} -U ${USR} --set ON_ERROR_STOP=on ${DB} --tuples-only`; do 
+cat << EOF >> routes.txt
+@app.route('${TABLE}/${i}/{${i}}')
+def ${i}(${i}):
+  ${i} = urllib.unquote(${i})
+  sql = "SELECT * FROM ${TABLE} WHERE ${i} = %s"
+  query = cursor.mogrify(sql, (${i},))
+  cursor.execute(query)
+  records = cursor.fetchall()
+  return {'results':str(records)}
+
+EOF
+done

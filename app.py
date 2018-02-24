@@ -17,7 +17,7 @@ def restaurants():
   return {'results':str(records)}
 
 @app.route('/restaurants/facility/{facility}')
-def get_facility(facility):
+def facility(facility):
   facility = urllib.unquote(facility)
   sql = "SELECT * FROM public.restaurants WHERE facility = %s"
   query = cursor.mogrify(sql, (facility,))
@@ -26,6 +26,13 @@ def get_facility(facility):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/introspect')
-def introspect():
-  return app.current_request.to_dict()
+@app.route('/restaurants/oid/{oid}')
+def oid(oid):
+  oid = urllib.unquote(oid)
+  sql = "SELECT * FROM public.restaurants WHERE oid = %s"
+  query = cursor.mogrify(sql, (oid,))
+  print query
+  cursor.execute(query)
+  records = cursor.fetchall()
+  return {'results':str(records)}
+

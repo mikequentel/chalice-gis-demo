@@ -26,6 +26,22 @@ def oid(oid):
   records = cursor.fetchall()
   return {'results':str(records)}
 
+@app.route('/restaurants/bbox/{bbox}')
+def bbox(bbox):
+  bbox = urllib.unquote(bbox)
+  print bbox
+  coords = bbox.split(",")
+  top = coords[0]
+  left = coords[1]
+  bottom = coords[2]
+  right = coords[3]
+  sql = "SELECT * FROM restaurants WHERE (latitude BETWEEN %s AND %s) AND (longitude BETWEEN %s AND %s)"
+  query = cursor.mogrify(sql, (bottom, top, left, right)) 
+  print query
+  cursor.execute(query) 
+  records = cursor.fetchall()
+  return {'results':str(records)}
+
 @app.route('/restaurants/address/{address}', methods=['GET'], cors=True)
 def address(address):
   address = urllib.unquote(address)

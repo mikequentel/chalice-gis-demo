@@ -26,7 +26,7 @@ def oid(oid):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/address/{address}')
+@app.route('/restaurants/address/{address}', methods=['GET'], cors=True)
 def address(address):
   address = urllib.unquote(address)
   sql = "SELECT * FROM restaurants WHERE address = %s"
@@ -35,7 +35,7 @@ def address(address):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/county/{county}')
+@app.route('/restaurants/county/{county}', methods=['GET'], cors=True)
 def county(county):
   county = urllib.unquote(county)
   sql = "SELECT * FROM restaurants WHERE county = %s"
@@ -44,7 +44,7 @@ def county(county):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/critical_violation/{critical_violation}')
+@app.route('/restaurants/critical_violation/{critical_violation}', methods=['GET'], cors=True)
 def critical_violation(critical_violation):
   critical_violation = urllib.unquote(critical_violation)
   sql = "SELECT * FROM restaurants WHERE critical_violation = %s"
@@ -53,7 +53,7 @@ def critical_violation(critical_violation):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/date_of_inspection/{date_of_inspection}')
+@app.route('/restaurants/date_of_inspection/{date_of_inspection}', methods=['GET'], cors=True)
 def date_of_inspection(date_of_inspection):
   date_of_inspection = urllib.unquote(date_of_inspection)
   sql = "SELECT * FROM restaurants WHERE date_of_inspection = %s"
@@ -62,7 +62,7 @@ def date_of_inspection(date_of_inspection):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/facility/{facility}')
+@app.route('/restaurants/facility/{facility}', methods=['GET'], cors=True)
 def facility(facility):
   facility = urllib.unquote(facility)
   sql = "SELECT * FROM restaurants WHERE facility = %s"
@@ -71,7 +71,7 @@ def facility(facility):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/facility_address/{facility_address}')
+@app.route('/restaurants/facility_address/{facility_address}', methods=['GET'], cors=True)
 def facility_address(facility_address):
   facility_address = urllib.unquote(facility_address)
   sql = "SELECT * FROM restaurants WHERE facility_address = %s"
@@ -80,7 +80,7 @@ def facility_address(facility_address):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/facility_city/{facility_city}')
+@app.route('/restaurants/facility_city/{facility_city}', methods=['GET'], cors=True)
 def facility_city(facility_city):
   facility_city = urllib.unquote(facility_city)
   sql = "SELECT * FROM restaurants WHERE facility_city = %s"
@@ -89,7 +89,7 @@ def facility_city(facility_city):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/facility_code/{facility_code}')
+@app.route('/restaurants/facility_code/{facility_code}', methods=['GET'], cors=True)
 def facility_code(facility_code):
   facility_code = urllib.unquote(facility_code)
   sql = "SELECT * FROM restaurants WHERE facility_code = %s"
@@ -98,7 +98,7 @@ def facility_code(facility_code):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/facility_municipality/{facility_municipality}')
+@app.route('/restaurants/facility_municipality/{facility_municipality}', methods=['GET'], cors=True)
 def facility_municipality(facility_municipality):
   facility_municipality = urllib.unquote(facility_municipality)
   sql = "SELECT * FROM restaurants WHERE facility_municipality = %s"
@@ -107,7 +107,7 @@ def facility_municipality(facility_municipality):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/facility_postal_zipcode/{facility_postal_zipcode}')
+@app.route('/restaurants/facility_postal_zipcode/{facility_postal_zipcode}', methods=['GET'], cors=True)
 def facility_postal_zipcode(facility_postal_zipcode):
   facility_postal_zipcode = urllib.unquote(facility_postal_zipcode)
   sql = "SELECT * FROM restaurants WHERE facility_postal_zipcode = %s"
@@ -116,7 +116,7 @@ def facility_postal_zipcode(facility_postal_zipcode):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/food_service_description/{food_service_description}')
+@app.route('/restaurants/food_service_description/{food_service_description}', methods=['GET'], cors=True)
 def food_service_description(food_service_description):
   food_service_description = urllib.unquote(food_service_description)
   sql = "SELECT * FROM restaurants WHERE food_service_description = %s"
@@ -125,7 +125,7 @@ def food_service_description(food_service_description):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/food_service_type/{food_service_type}')
+@app.route('/restaurants/food_service_type/{food_service_type}', methods=['GET'], cors=True)
 def food_service_type(food_service_type):
   food_service_type = urllib.unquote(food_service_type)
   sql = "SELECT * FROM restaurants WHERE food_service_type = %s"
@@ -134,7 +134,7 @@ def food_service_type(food_service_type):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/fs_facility_state/{fs_facility_state}')
+@app.route('/restaurants/fs_facility_state/{fs_facility_state}', methods=['GET'], cors=True)
 def fs_facility_state(fs_facility_state):
   fs_facility_state = urllib.unquote(fs_facility_state)
   sql = "SELECT * FROM restaurants WHERE fs_facility_state = %s"
@@ -143,7 +143,7 @@ def fs_facility_state(fs_facility_state):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/inspection_comments/{inspection_comments}')
+@app.route('/restaurants/inspection_comments/{inspection_comments}', methods=['GET'], cors=True)
 def inspection_comments(inspection_comments):
   inspection_comments = urllib.unquote(inspection_comments)
   sql = "SELECT * FROM restaurants WHERE inspection_comments = %s"
@@ -152,7 +152,7 @@ def inspection_comments(inspection_comments):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/inspection_type/{inspection_type}')
+@app.route('/restaurants/inspection_type/{inspection_type}', methods=['GET'], cors=True)
 def inspection_type(inspection_type):
   inspection_type = urllib.unquote(inspection_type)
   sql = "SELECT * FROM restaurants WHERE inspection_type = %s"
@@ -161,7 +161,7 @@ def inspection_type(inspection_type):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/inspector_id/{inspector_id}')
+@app.route('/restaurants/inspector_id/{inspector_id}', methods=['GET'], cors=True)
 def inspector_id(inspector_id):
   inspector_id = urllib.unquote(inspector_id)
   sql = "SELECT * FROM restaurants WHERE inspector_id = %s"
@@ -170,7 +170,7 @@ def inspector_id(inspector_id):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/latitude/{latitude}')
+@app.route('/restaurants/latitude/{latitude}', methods=['GET'], cors=True)
 def latitude(latitude):
   latitude = urllib.unquote(latitude)
   sql = "SELECT * FROM restaurants WHERE latitude = %s"
@@ -179,7 +179,7 @@ def latitude(latitude):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/local_health_department/{local_health_department}')
+@app.route('/restaurants/local_health_department/{local_health_department}', methods=['GET'], cors=True)
 def local_health_department(local_health_department):
   local_health_department = urllib.unquote(local_health_department)
   sql = "SELECT * FROM restaurants WHERE local_health_department = %s"
@@ -188,7 +188,7 @@ def local_health_department(local_health_department):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/longitude/{longitude}')
+@app.route('/restaurants/longitude/{longitude}', methods=['GET'], cors=True)
 def longitude(longitude):
   longitude = urllib.unquote(longitude)
   sql = "SELECT * FROM restaurants WHERE longitude = %s"
@@ -197,7 +197,7 @@ def longitude(longitude):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/nysdoh_gazetteer_1980/{nysdoh_gazetteer_1980}')
+@app.route('/restaurants/nysdoh_gazetteer_1980/{nysdoh_gazetteer_1980}', methods=['GET'], cors=True)
 def nysdoh_gazetteer_1980(nysdoh_gazetteer_1980):
   nysdoh_gazetteer_1980 = urllib.unquote(nysdoh_gazetteer_1980)
   sql = "SELECT * FROM restaurants WHERE nysdoh_gazetteer_1980 = %s"
@@ -206,7 +206,7 @@ def nysdoh_gazetteer_1980(nysdoh_gazetteer_1980):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/nys_health_operation_id/{nys_health_operation_id}')
+@app.route('/restaurants/nys_health_operation_id/{nys_health_operation_id}', methods=['GET'], cors=True)
 def nys_health_operation_id(nys_health_operation_id):
   nys_health_operation_id = urllib.unquote(nys_health_operation_id)
   sql = "SELECT * FROM restaurants WHERE nys_health_operation_id = %s"
@@ -215,7 +215,7 @@ def nys_health_operation_id(nys_health_operation_id):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/operation_name/{operation_name}')
+@app.route('/restaurants/operation_name/{operation_name}', methods=['GET'], cors=True)
 def operation_name(operation_name):
   operation_name = urllib.unquote(operation_name)
   sql = "SELECT * FROM restaurants WHERE operation_name = %s"
@@ -224,7 +224,7 @@ def operation_name(operation_name):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/permit_expiration_date/{permit_expiration_date}')
+@app.route('/restaurants/permit_expiration_date/{permit_expiration_date}', methods=['GET'], cors=True)
 def permit_expiration_date(permit_expiration_date):
   permit_expiration_date = urllib.unquote(permit_expiration_date)
   sql = "SELECT * FROM restaurants WHERE permit_expiration_date = %s"
@@ -233,7 +233,7 @@ def permit_expiration_date(permit_expiration_date):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/permitted_corp_name/{permitted_corp_name}')
+@app.route('/restaurants/permitted_corp_name/{permitted_corp_name}', methods=['GET'], cors=True)
 def permitted_corp_name(permitted_corp_name):
   permitted_corp_name = urllib.unquote(permitted_corp_name)
   sql = "SELECT * FROM restaurants WHERE permitted_corp_name = %s"
@@ -242,7 +242,7 @@ def permitted_corp_name(permitted_corp_name):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/permitted_dba/{permitted_dba}')
+@app.route('/restaurants/permitted_dba/{permitted_dba}', methods=['GET'], cors=True)
 def permitted_dba(permitted_dba):
   permitted_dba = urllib.unquote(permitted_dba)
   sql = "SELECT * FROM restaurants WHERE permitted_dba = %s"
@@ -251,7 +251,7 @@ def permitted_dba(permitted_dba):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/perm_operator_first_name/{perm_operator_first_name}')
+@app.route('/restaurants/perm_operator_first_name/{perm_operator_first_name}', methods=['GET'], cors=True)
 def perm_operator_first_name(perm_operator_first_name):
   perm_operator_first_name = urllib.unquote(perm_operator_first_name)
   sql = "SELECT * FROM restaurants WHERE perm_operator_first_name = %s"
@@ -260,7 +260,7 @@ def perm_operator_first_name(perm_operator_first_name):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/perm_operator_last_name/{perm_operator_last_name}')
+@app.route('/restaurants/perm_operator_last_name/{perm_operator_last_name}', methods=['GET'], cors=True)
 def perm_operator_last_name(perm_operator_last_name):
   perm_operator_last_name = urllib.unquote(perm_operator_last_name)
   sql = "SELECT * FROM restaurants WHERE perm_operator_last_name = %s"
@@ -269,7 +269,7 @@ def perm_operator_last_name(perm_operator_last_name):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/total_num_critical_violations/{total_num_critical_violations}')
+@app.route('/restaurants/total_num_critical_violations/{total_num_critical_violations}', methods=['GET'], cors=True)
 def total_num_critical_violations(total_num_critical_violations):
   total_num_critical_violations = urllib.unquote(total_num_critical_violations)
   sql = "SELECT * FROM restaurants WHERE total_num_critical_violations = %s"
@@ -278,7 +278,7 @@ def total_num_critical_violations(total_num_critical_violations):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/total_num_crit_not_corrected/{total_num_crit_not_corrected}')
+@app.route('/restaurants/total_num_crit_not_corrected/{total_num_crit_not_corrected}', methods=['GET'], cors=True)
 def total_num_crit_not_corrected(total_num_crit_not_corrected):
   total_num_crit_not_corrected = urllib.unquote(total_num_crit_not_corrected)
   sql = "SELECT * FROM restaurants WHERE total_num_crit_not_corrected = %s"
@@ -287,7 +287,7 @@ def total_num_crit_not_corrected(total_num_crit_not_corrected):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/total_num_noncritical_violations/{total_num_noncritical_violations}')
+@app.route('/restaurants/total_num_noncritical_violations/{total_num_noncritical_violations}', methods=['GET'], cors=True)
 def total_num_noncritical_violations(total_num_noncritical_violations):
   total_num_noncritical_violations = urllib.unquote(total_num_noncritical_violations)
   sql = "SELECT * FROM restaurants WHERE total_num_noncritical_violations = %s"
@@ -296,7 +296,7 @@ def total_num_noncritical_violations(total_num_noncritical_violations):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/violation_description/{violation_description}')
+@app.route('/restaurants/violation_description/{violation_description}', methods=['GET'], cors=True)
 def violation_description(violation_description):
   violation_description = urllib.unquote(violation_description)
   sql = "SELECT * FROM restaurants WHERE violation_description = %s"
@@ -305,7 +305,7 @@ def violation_description(violation_description):
   records = cursor.fetchall()
   return {'results':str(records)}
 
-@app.route('/restaurants/violation_item/{violation_item}')
+@app.route('/restaurants/violation_item/{violation_item}', methods=['GET'], cors=True)
 def violation_item(violation_item):
   violation_item = urllib.unquote(violation_item)
   sql = "SELECT * FROM restaurants WHERE violation_item = %s"
@@ -313,6 +313,7 @@ def violation_item(violation_item):
   cursor.execute(query)
   records = cursor.fetchall()
   return {'results':str(records)}
+
 
 
 

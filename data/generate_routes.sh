@@ -33,7 +33,7 @@ if [ -f routes.txt ]; then
 fi
 for i in `echo $SQL | psql -h ${HOST} -U ${USR} --set ON_ERROR_STOP=on ${DB} --tuples-only`; do 
 cat << EOF >> routes.txt
-@app.route('/${TABLE}/${i}/{${i}}')
+@app.route('/${TABLE}/${i}/{${i}}', methods=['GET'], cors=True)
 def ${i}(${i}):
   ${i} = urllib.unquote(${i})
   sql = "SELECT * FROM ${TABLE} WHERE ${i} = %s"

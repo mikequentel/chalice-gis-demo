@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Zoom Sliders</title>
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.6.4/css/ol.css" type="text/css">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
+  </head>
+  <body>
+    <div id="map1" class="map"></div>
+
+    <script>
+      /**
+       * Helper method for map-creation.
+       *
+       * @param {string} divId The id of the div for the map.
+       * @return {ol.PluggableMap} The ol.Map instance.
+       */
+      var createMap = function(divId) {
+        var source, layer, map, zoomslider;
+
+        source = new ol.source.OSM();
+        layer = new ol.layer.Tile({
+          source: source
+        });
+        
+        pointLayer = new ol.layer.Vector({
+          source: new ol.source.Vector({
+            features: []
+          }),
+          style: function(feature) {
+            // hide geoMarker if animation is active
+            if (animating && feature.get('type') === 'geoMarker') {
+              return null;
+            }
+            return styles[feature.get('type')];
+          }
+        });       
+
+        map = new ol.Map({
+          layers: [layer, pointLayer],
+          target: divId,
+          view: new ol.View({
+            center: [0, 0],
+            zoom: 2
+          })
+        });
+        zoomslider = new ol.control.ZoomSlider();
+        map.addControl(zoomslider);
+        return map;
+      };
+
+      var map1 = createMap('map1');
+
+      // https://stackoverflow.com/questions/12460378/how-to-get-json-from-url-in-javascript
+      let url = 'http://localhost:8000/restaurants/facility_address/51%20FOX%20STREET';
+
+      fetch(url)
+      .then(res => res.json())
+      .then((out) => {
+        console.log('Checkout this JSON! ', out);
+      })
+      .catch(err => { throw err });
+    </script>
+
+  </body>
+</html>

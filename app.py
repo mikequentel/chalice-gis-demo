@@ -1,8 +1,5 @@
 import math
 import urllib
-# import cgi
-# import sys
-# import json
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from chalice import Chalice
@@ -60,23 +57,14 @@ def circle(circle):
   centre_lat = float(coords[0])
   centre_lon = float(coords[1])
   radius = float(coords[2])
-  print radius
-  print radius * 2.0
-  print CONST.EARTH_MEAN_RADIUS
-  print radius/CONST.EARTH_MEAN_RADIUS
   # SQL for determining lat and lon values within a circle, transcribed
   # from example by Chris Veness ((c) 2008-2016)
   # https://www.movable-type.co.uk/scripts/latlong-db.html
-  # max_lat = centre_lat + math.radians(radius/CONST.EARTH_MEAN_RADIUS)
-  # min_lat = centre_lat - math.radians(radius/CONST.EARTH_MEAN_RADIUS)
-  # max_lon = centre_lon + math.radians(radius/CONST.EARTH_MEAN_RADIUS)
-  # min_lon = centre_lon - math.radians(radius/CONST.EARTH_MEAN_RADIUS)
   sql = "SELECT *, ACOS(SIN(RADIANS(%s)) * SIN(RADIANS(latitude)) + COS(RADIANS(%s)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude - ABS(%s)))) * %s AS D FROM restaurants WHERE ACOS(SIN(RADIANS(%s)) * SIN(RADIANS(latitude)) + COS(RADIANS(%s)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude - ABS(%s)))) * %s < %s"
   query = cursor.mogrify(sql, (centre_lat, centre_lat, centre_lon, CONST.EARTH_MEAN_RADIUS, centre_lat, centre_lat, centre_lon, CONST.EARTH_MEAN_RADIUS, radius))
   print query
   cursor.execute(query)
   records = cursor.fetchall()
-  # records = Null
   return {'results':str(records)}
 
 @app.route('/restaurants/address/{address}', methods=['GET'], cors=True)

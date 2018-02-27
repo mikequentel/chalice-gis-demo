@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Zoom Sliders</title>
+    <title>Chalice GIS Demo</title>
     <link rel="stylesheet" href="https://openlayers.org/en/v4.6.4/css/ol.css" type="text/css">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
     <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
@@ -39,11 +40,12 @@
         });       
 
         map = new ol.Map({
+          project: "EPSG:4326",
           layers: [layer, pointLayer],
           target: divId,
           view: new ol.View({
-            center: [0, 0],
-            zoom: 2
+            center: ol.proj.fromLonLat([-74.9045388866985,42.2217382933897]),
+            zoom: 9
           })
         });
         zoomslider = new ol.control.ZoomSlider();
@@ -54,14 +56,64 @@
       var map1 = createMap('map1');
 
       // https://stackoverflow.com/questions/12460378/how-to-get-json-from-url-in-javascript
-      let url = 'http://localhost:8000/restaurants/facility_address/51%20FOX%20STREET';
-
+      // let url = 'http://localhost:8000/restaurants/facility_address/51%20FOX%20STREET';
+      /*
+      let url = 'http://localhost:8000/restaurants';
       fetch(url)
       .then(res => res.json())
       .then((out) => {
-        console.log('Checkout this JSON! ', out);
+        console.log('RESPONSE: ', out);
       })
       .catch(err => { throw err });
+      */
+
+      function successHandler(data) {
+        // var jsonData = JSON.parse(data);
+        //console.log(jsonData.results.slice(1, -1)[0]);
+        // console.log(data.results.slice(1, -1));
+        console.log(data.results);
+        // console.log(data.results);
+        // JSON.parse(jsonData.results.slice(1, -1));
+        //for (var i = 0; i < jsonData.length; i++) {
+        //  console.log(jsonData[i]);
+        // }
+        // var jsonData = JSON.parse(JSON.stringify(data[0]));
+        // console.log("DATA: " + data.results);
+        // loop over the items in the response
+        // data.results.forEach(function(item) {
+        //console.log(jsonData);
+        // console.log(JSON.parse(jsonData.results));
+        // console.log(JSON.stringify(data));
+        // for (var item in data.results) {
+        // for (var i = 0; i < data.results.length; i++) {
+          // console.log("RESULT ITEM: " + data.results[item]);
+          // var item = data.results;
+          // var item = data[i];
+          // var item = data[i].results;
+          // console.log("RESULT ITEM: " + item[0]);
+       //  }
+        //data.results(function(item) {
+         // console.log("RESULT ITEM: " + item);
+          // create a new feature with the item as the properties
+          //var feature = new ol.Feature(item);
+          // create an appropriate geometry and add it to the feature
+          // var coordinate = transform([parseFloat(item.longitude), parseFloat(item.latitude)]);
+          //var coordinate = [parseFloat(item.longitude), parseFloat(item.latitude)];
+          //var geometry = new ol.geom.Point(coordinate);
+         // feature.setGeometry(geometry);
+          // add the feature to the source
+          // flickrSource.addFeature(feature);
+        //  pointLayer.source.addFeature(feature);
+      //});
+    }
+
+
+    $.ajax({
+      url: 'http://localhost:8000/restaurants/facility_address/51%20FOX%20STREET',
+      dataType: 'json',
+      success: successHandler
+     });
+
     </script>
 
   </body>

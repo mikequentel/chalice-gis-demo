@@ -1,3 +1,5 @@
+import json
+from datetime import date, datetime
 import math
 import urllib
 import psycopg2
@@ -17,11 +19,17 @@ class CONST(object):
 
 CONST = CONST()
 
+# https://stackoverflow.com/questions/11875770/how-to-overcome-datetime-datetime-not-json-serializable
+def json_serial(obj):
+  if isinstance(obj, (datetime, date)):
+    return obj.isoformat()
+    raise TypeError("Type %s not serializable" % type(obj))
+
 @app.route('/restaurants', methods=['GET'], cors=True)
 def restaurants():
   cursor.execute('SELECT * FROM public.restaurants LIMIT 100')
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/oid/{oid}', methods=['GET'], cors=True)
 def oid(oid):
@@ -31,7 +39,7 @@ def oid(oid):
   print query
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/bbox/{bbox}', methods=['GET'], cors=True)
 def bbox(bbox):
@@ -47,7 +55,7 @@ def bbox(bbox):
   print query
   cursor.execute(query) 
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/circle/{circle}', methods=['GET'], cors=True)
 def circle(circle):
@@ -65,7 +73,7 @@ def circle(circle):
   print query
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/address/{address}', methods=['GET'], cors=True)
 def address(address):
@@ -74,7 +82,7 @@ def address(address):
   query = cursor.mogrify(sql, (address,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/county/{county}', methods=['GET'], cors=True)
 def county(county):
@@ -83,7 +91,7 @@ def county(county):
   query = cursor.mogrify(sql, (county,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/critical_violation/{critical_violation}', methods=['GET'], cors=True)
 def critical_violation(critical_violation):
@@ -92,7 +100,7 @@ def critical_violation(critical_violation):
   query = cursor.mogrify(sql, (critical_violation,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/date_of_inspection/{date_of_inspection}', methods=['GET'], cors=True)
 def date_of_inspection(date_of_inspection):
@@ -101,7 +109,7 @@ def date_of_inspection(date_of_inspection):
   query = cursor.mogrify(sql, (date_of_inspection,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/facility/{facility}', methods=['GET'], cors=True)
 def facility(facility):
@@ -110,7 +118,7 @@ def facility(facility):
   query = cursor.mogrify(sql, (facility,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/facility_address/{facility_address}', methods=['GET'], cors=True)
 def facility_address(facility_address):
@@ -119,7 +127,7 @@ def facility_address(facility_address):
   query = cursor.mogrify(sql, (facility_address,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/facility_city/{facility_city}', methods=['GET'], cors=True)
 def facility_city(facility_city):
@@ -128,7 +136,7 @@ def facility_city(facility_city):
   query = cursor.mogrify(sql, (facility_city,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/facility_code/{facility_code}', methods=['GET'], cors=True)
 def facility_code(facility_code):
@@ -137,7 +145,7 @@ def facility_code(facility_code):
   query = cursor.mogrify(sql, (facility_code,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/facility_municipality/{facility_municipality}', methods=['GET'], cors=True)
 def facility_municipality(facility_municipality):
@@ -146,7 +154,7 @@ def facility_municipality(facility_municipality):
   query = cursor.mogrify(sql, (facility_municipality,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/facility_postal_zipcode/{facility_postal_zipcode}', methods=['GET'], cors=True)
 def facility_postal_zipcode(facility_postal_zipcode):
@@ -155,7 +163,7 @@ def facility_postal_zipcode(facility_postal_zipcode):
   query = cursor.mogrify(sql, (facility_postal_zipcode,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/food_service_description/{food_service_description}', methods=['GET'], cors=True)
 def food_service_description(food_service_description):
@@ -164,7 +172,7 @@ def food_service_description(food_service_description):
   query = cursor.mogrify(sql, (food_service_description,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/food_service_type/{food_service_type}', methods=['GET'], cors=True)
 def food_service_type(food_service_type):
@@ -173,7 +181,7 @@ def food_service_type(food_service_type):
   query = cursor.mogrify(sql, (food_service_type,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/fs_facility_state/{fs_facility_state}', methods=['GET'], cors=True)
 def fs_facility_state(fs_facility_state):
@@ -182,7 +190,7 @@ def fs_facility_state(fs_facility_state):
   query = cursor.mogrify(sql, (fs_facility_state,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/inspection_comments/{inspection_comments}', methods=['GET'], cors=True)
 def inspection_comments(inspection_comments):
@@ -191,7 +199,7 @@ def inspection_comments(inspection_comments):
   query = cursor.mogrify(sql, (inspection_comments,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/inspection_type/{inspection_type}', methods=['GET'], cors=True)
 def inspection_type(inspection_type):
@@ -200,7 +208,7 @@ def inspection_type(inspection_type):
   query = cursor.mogrify(sql, (inspection_type,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/inspector_id/{inspector_id}', methods=['GET'], cors=True)
 def inspector_id(inspector_id):
@@ -209,7 +217,7 @@ def inspector_id(inspector_id):
   query = cursor.mogrify(sql, (inspector_id,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/latitude/{latitude}', methods=['GET'], cors=True)
 def latitude(latitude):
@@ -218,7 +226,7 @@ def latitude(latitude):
   query = cursor.mogrify(sql, (latitude,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/local_health_department/{local_health_department}', methods=['GET'], cors=True)
 def local_health_department(local_health_department):
@@ -227,7 +235,7 @@ def local_health_department(local_health_department):
   query = cursor.mogrify(sql, (local_health_department,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/longitude/{longitude}', methods=['GET'], cors=True)
 def longitude(longitude):
@@ -236,7 +244,7 @@ def longitude(longitude):
   query = cursor.mogrify(sql, (longitude,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/nysdoh_gazetteer_1980/{nysdoh_gazetteer_1980}', methods=['GET'], cors=True)
 def nysdoh_gazetteer_1980(nysdoh_gazetteer_1980):
@@ -245,7 +253,7 @@ def nysdoh_gazetteer_1980(nysdoh_gazetteer_1980):
   query = cursor.mogrify(sql, (nysdoh_gazetteer_1980,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/nys_health_operation_id/{nys_health_operation_id}', methods=['GET'], cors=True)
 def nys_health_operation_id(nys_health_operation_id):
@@ -254,7 +262,7 @@ def nys_health_operation_id(nys_health_operation_id):
   query = cursor.mogrify(sql, (nys_health_operation_id,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/operation_name/{operation_name}', methods=['GET'], cors=True)
 def operation_name(operation_name):
@@ -263,7 +271,7 @@ def operation_name(operation_name):
   query = cursor.mogrify(sql, (operation_name,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/permit_expiration_date/{permit_expiration_date}', methods=['GET'], cors=True)
 def permit_expiration_date(permit_expiration_date):
@@ -272,7 +280,7 @@ def permit_expiration_date(permit_expiration_date):
   query = cursor.mogrify(sql, (permit_expiration_date,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/permitted_corp_name/{permitted_corp_name}', methods=['GET'], cors=True)
 def permitted_corp_name(permitted_corp_name):
@@ -281,7 +289,7 @@ def permitted_corp_name(permitted_corp_name):
   query = cursor.mogrify(sql, (permitted_corp_name,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/permitted_dba/{permitted_dba}', methods=['GET'], cors=True)
 def permitted_dba(permitted_dba):
@@ -290,7 +298,7 @@ def permitted_dba(permitted_dba):
   query = cursor.mogrify(sql, (permitted_dba,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/perm_operator_first_name/{perm_operator_first_name}', methods=['GET'], cors=True)
 def perm_operator_first_name(perm_operator_first_name):
@@ -299,7 +307,7 @@ def perm_operator_first_name(perm_operator_first_name):
   query = cursor.mogrify(sql, (perm_operator_first_name,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/perm_operator_last_name/{perm_operator_last_name}', methods=['GET'], cors=True)
 def perm_operator_last_name(perm_operator_last_name):
@@ -308,7 +316,7 @@ def perm_operator_last_name(perm_operator_last_name):
   query = cursor.mogrify(sql, (perm_operator_last_name,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/total_num_critical_violations/{total_num_critical_violations}', methods=['GET'], cors=True)
 def total_num_critical_violations(total_num_critical_violations):
@@ -317,7 +325,7 @@ def total_num_critical_violations(total_num_critical_violations):
   query = cursor.mogrify(sql, (total_num_critical_violations,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/total_num_crit_not_corrected/{total_num_crit_not_corrected}', methods=['GET'], cors=True)
 def total_num_crit_not_corrected(total_num_crit_not_corrected):
@@ -326,7 +334,7 @@ def total_num_crit_not_corrected(total_num_crit_not_corrected):
   query = cursor.mogrify(sql, (total_num_crit_not_corrected,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/total_num_noncritical_violations/{total_num_noncritical_violations}', methods=['GET'], cors=True)
 def total_num_noncritical_violations(total_num_noncritical_violations):
@@ -335,7 +343,7 @@ def total_num_noncritical_violations(total_num_noncritical_violations):
   query = cursor.mogrify(sql, (total_num_noncritical_violations,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/violation_description/{violation_description}', methods=['GET'], cors=True)
 def violation_description(violation_description):
@@ -344,7 +352,7 @@ def violation_description(violation_description):
   query = cursor.mogrify(sql, (violation_description,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/violation_item/{violation_item}', methods=['GET'], cors=True)
 def violation_item(violation_item):
@@ -353,7 +361,7 @@ def violation_item(violation_item):
   query = cursor.mogrify(sql, (violation_item,))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 
 

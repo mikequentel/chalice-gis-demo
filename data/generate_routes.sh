@@ -33,6 +33,12 @@ if [ -f routes.txt ]; then
 fi
 for i in `echo $SQL | psql -h ${HOST} -U ${USR} --set ON_ERROR_STOP=on ${DB} --tuples-only`; do 
 cat << EOF >> routes.txt
+# https://stackoverflow.com/questions/11875770/how-to-overcome-datetime-datetime-not-json-serializable
+def json_serial(obj):
+  if isinstance(obj, (datetime, date)):
+    return obj.isoformat()
+    raise TypeError("Type %s not serializable" % type(obj))
+
 @app.route('/${TABLE}/${i}/{${i}}', methods=['GET'], cors=True)
 def ${i}(${i}):
   ${i} = urllib.unquote(${i})
@@ -40,7 +46,7 @@ def ${i}(${i}):
   query = cursor.mogrify(sql, (${i},))
   cursor.execute(query)
   records = cursor.fetchall()
-  return {'results':str(records)}
+  return {'results':json.dumps(records, default=json_serial)}
 
 EOF
 done

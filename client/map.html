@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Chalice GIS Demo</title>
+    <meta charset="utf-8"/>
     <link rel="stylesheet" href="https://openlayers.org/en/v4.6.4/css/ol.css" type="text/css">
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
@@ -68,30 +69,21 @@
       */
 
       function successHandler(data) {
-        // var jsonData = JSON.parse(data);
-        //console.log(jsonData.results.slice(1, -1)[0]);
-        // console.log(data.results.slice(1, -1));
-        console.log(data.results);
-        // console.log(data.results);
-        // JSON.parse(jsonData.results.slice(1, -1));
-        //for (var i = 0; i < jsonData.length; i++) {
-        //  console.log(jsonData[i]);
-        // }
-        // var jsonData = JSON.parse(JSON.stringify(data[0]));
-        // console.log("DATA: " + data.results);
-        // loop over the items in the response
-        // data.results.forEach(function(item) {
-        //console.log(jsonData);
-        // console.log(JSON.parse(jsonData.results));
-        // console.log(JSON.stringify(data));
-        // for (var item in data.results) {
-        // for (var i = 0; i < data.results.length; i++) {
-          // console.log("RESULT ITEM: " + data.results[item]);
-          // var item = data.results;
-          // var item = data[i];
-          // var item = data[i].results;
-          // console.log("RESULT ITEM: " + item[0]);
-       //  }
+        dataString = JSON.stringify(data);
+        dataString = dataString.replace(/\\/g,'');
+        dataString = dataString.replace(/\'/g,'\"');
+        dataString = dataString.replace(/"S/g, "\'S");
+        dataString = dataString.replace(/'\[/g, '[');
+        dataString = dataString.replace(/]'/g, ']');
+        dataString = dataString.replace(/"\[/g, '[');
+        dataString = dataString.replace(/]"/g, ']');       
+        var jsonData = JSON.parse(dataString);  
+        console.log(jsonData);
+
+        for (var i = 0; i < jsonData.length; i++) {
+          console.log(jsonData[i]);
+        }
+        
         //data.results(function(item) {
          // console.log("RESULT ITEM: " + item);
           // create a new feature with the item as the properties

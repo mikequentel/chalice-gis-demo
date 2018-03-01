@@ -41,11 +41,13 @@ def json_serial(obj):
 
 @app.route('/${TABLE}/${i}/{${i}}', methods=['GET'], cors=True)
 def ${i}(${i}):
+  cursor = conn.cursor(cursor_factory=RealDictCursor)
   ${i} = urllib.unquote(${i})
   sql = "SELECT * FROM ${TABLE} WHERE ${i} = %s"
   query = cursor.mogrify(sql, (${i},))
   cursor.execute(query)
   records = cursor.fetchall()
+  cursor.close()
   return {'results':json.dumps(records, default=json_serial)}
 
 EOF

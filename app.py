@@ -27,14 +27,14 @@ def json_serial(obj):
 
 @app.route('/restaurants', methods=['GET'], cors=True)
 def restaurants():
-  cursor.execute('SELECT * FROM public.restaurants LIMIT 100')
+  cursor.execute('SELECT * FROM restaurants LIMIT 100')
   records = cursor.fetchall()
   return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/oid/{oid}', methods=['GET'], cors=True)
 def oid(oid):
   oid = urllib.unquote(oid)
-  sql = "SELECT * FROM public.restaurants WHERE oid = %s"
+  sql = "SELECT * FROM restaurants WHERE oid = %s"
   query = cursor.mogrify(sql, (oid,))
   print query
   cursor.execute(query)

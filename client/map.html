@@ -34,54 +34,53 @@
       layers: [layer],
       target: "mapDiv",
       view: new ol.View({
-        /* center: ol.proj.fromLonLat([-75.2326641,43.1009031]), */
-        center: ol.proj.fromLonLat([-76.064429, 42.095128]),
-        zoom: 8
+        center: ol.proj.fromLonLat([-75.2326641,43.1009031]),
+        /* center: ol.proj.fromLonLat([-76.064429, 42.095128]), */
+        zoom: 7
       })
     });
     var zoomslider = new ol.control.ZoomSlider();
     map.addControl(zoomslider);
      
 
-      function successHandler(data) {
-        // console.log(data);
-        dataString = JSON.stringify(data);
-        dataString = dataString.replace(/\\/g,'');
-        dataString = dataString.replace(/'\[/g, '[');
-        dataString = dataString.replace(/]'/g, ']');
-        dataString = dataString.replace(/"\[/g, '[');
-        dataString = dataString.replace(/]"/g, ']');
-        console.log(dataString);       
-        var jsonData = JSON.parse(dataString);  
+    function successHandler(data) {
+      // console.log(data);
+      dataString = JSON.stringify(data);
+      dataString = dataString.replace(/\\/g,'');
+      dataString = dataString.replace(/'\[/g, '[');
+      dataString = dataString.replace(/]'/g, ']');
+      dataString = dataString.replace(/"\[/g, '[');
+      dataString = dataString.replace(/]"/g, ']');
+      //console.log(dataString);       
+      var jsonData = JSON.parse(dataString);  
 
-        var vectorSource = new ol.source.Vector({});
+      var vectorSource = new ol.source.Vector({});
            
-        for (var i = 0; i < jsonData.results.length; i++) {
-          //console.log(jsonData.results[i].latitude);
-          //console.log(jsonData.results[i].longitude);
-          var coordinate = [parseFloat(jsonData.results[i].longitude), parseFloat(jsonData.results[i].latitude)];
-          var geom = new ol.geom.Point(ol.proj.fromLonLat(coordinate));
-          var feature = new ol.Feature({geometry: geom});
-          vectorSource.addFeature(feature);
-        }
+      for (var i = 0; i < jsonData.results.length; i++) {
+        //console.log(jsonData.results[i].latitude);
+        //console.log(jsonData.results[i].longitude);
+        var coordinate = [parseFloat(jsonData.results[i].longitude), parseFloat(jsonData.results[i].latitude)];
+        var geom = new ol.geom.Point(ol.proj.fromLonLat(coordinate));
+        var feature = new ol.Feature({geometry: geom});
+        vectorSource.addFeature(feature);
+      }
 
-        var pointLayer = new ol.layer.Vector({
-          name: "pointLayer",
-          source: vectorSource,
-          style: iconStyle
-        }); 
+      var pointLayer = new ol.layer.Vector({
+        name: "pointLayer",
+        source: vectorSource,
+        style: iconStyle
+      }); 
 
-        map.addLayer(pointLayer);
-        map.render();
+      map.addLayer(pointLayer);
+      map.render();
     }
 
 
     $.ajax({
-      /* url: 'http://localhost:8000/restaurants', */
+      url: 'http://localhost:8000/restaurants',
       /* url: 'http://localhost:8000/restaurants/facility_address/51%20FOX%20STREET', */
       /* url: 'http://localhost:8000/restaurants/facility_address/148%20TANNERY%20ROAD',*/
-      /* url: 'http://localhost:8000/restaurants/facility_city/UTICA', */
-      url: 'http://localhost:8000/restaurants/circle/42.095128,-76.064429,236.4',
+      /* url: 'http://localhost:8000/restaurants/circle/42.095128,-76.064429,236.4', */
       dataType: 'json',
       success: successHandler
      });

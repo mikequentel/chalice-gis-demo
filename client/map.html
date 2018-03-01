@@ -10,98 +10,78 @@
     <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
   </head>
   <body>
-    <div id="map1" class="map"></div>
+    <div id="mapDiv" class="map"></div>
 
     <script>
-      /**
-       * Helper method for map-creation.
-       *
-       * @param {string} divId The id of the div for the map.
-       * @return {ol.PluggableMap} The ol.Map instance.
-       */
-      var createMap = function(divId) {
-        var source, layer, map, zoomslider;
+    var source = new ol.source.OSM();
+    var layer = new ol.layer.Tile({
+      name: "tileLayer",
+      source: source
+    });
 
-        source = new ol.source.OSM();
-        layer = new ol.layer.Tile({
-          source: source
-        });
-        
-        pointLayer = new ol.layer.Vector({
-          source: new ol.source.Vector({
-            features: []
-          }),
-          style: function(feature) {
-            // hide geoMarker if animation is active
-            if (animating && feature.get('type') === 'geoMarker') {
-              return null;
-            }
-            return styles[feature.get('type')];
-          }
-        });       
+    var iconStyle = new ol.style.Style({
+      image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+        color: '#FF00FF',
+        crossOrigin: 'anonymous',
+        opacity: 0.75,
+        src: 'img/dot.png'
+      }))
+    });
 
-        map = new ol.Map({
-          project: "EPSG:4326",
-          layers: [layer, pointLayer],
-          target: divId,
-          view: new ol.View({
-            center: ol.proj.fromLonLat([-74.9045388866985,42.2217382933897]),
-            zoom: 9
-          })
-        });
-        zoomslider = new ol.control.ZoomSlider();
-        map.addControl(zoomslider);
-        return map;
-      };
-
-      var map1 = createMap('map1');
-
-      // https://stackoverflow.com/questions/12460378/how-to-get-json-from-url-in-javascript
-      // let url = 'http://localhost:8000/restaurants/facility_address/51%20FOX%20STREET';
-      /*
-      let url = 'http://localhost:8000/restaurants';
-      fetch(url)
-      .then(res => res.json())
-      .then((out) => {
-        console.log('RESPONSE: ', out);
+    var map = new ol.Map({
+      /* project: "EPSG:4326", */
+      project: "EPSG:3857",
+      layers: [layer],
+      target: "mapDiv",
+      view: new ol.View({
+        /* center: ol.proj.fromLonLat([-75.2326641,43.1009031]), */
+        center: ol.proj.fromLonLat([-76.064429, 42.095128]),
+        zoom: 8
       })
-      .catch(err => { throw err });
-      */
+    });
+    var zoomslider = new ol.control.ZoomSlider();
+    map.addControl(zoomslider);
+     
 
       function successHandler(data) {
+        // console.log(data);
         dataString = JSON.stringify(data);
         dataString = dataString.replace(/\\/g,'');
-        dataString = dataString.replace(/\'/g,'\"');
-        dataString = dataString.replace(/"S/g, "\'S");
         dataString = dataString.replace(/'\[/g, '[');
         dataString = dataString.replace(/]'/g, ']');
         dataString = dataString.replace(/"\[/g, '[');
-        dataString = dataString.replace(/]"/g, ']');       
+        dataString = dataString.replace(/]"/g, ']');
+        console.log(dataString);       
         var jsonData = JSON.parse(dataString);  
-        console.log(jsonData);
 
-        for (var i = 0; i < jsonData.length; i++) {
-          console.log(jsonData[i]);
+        var vectorSource = new ol.source.Vector({});
+           
+        for (var i = 0; i < jsonData.results.length; i++) {
+          //console.log(jsonData.results[i].latitude);
+          //console.log(jsonData.results[i].longitude);
+          var coordinate = [parseFloat(jsonData.results[i].longitude), parseFloat(jsonData.results[i].latitude)];
+          var geom = new ol.geom.Point(ol.proj.fromLonLat(coordinate));
+          var feature = new ol.Feature({geometry: geom});
+          vectorSource.addFeature(feature);
         }
-        
-        //data.results(function(item) {
-         // console.log("RESULT ITEM: " + item);
-          // create a new feature with the item as the properties
-          //var feature = new ol.Feature(item);
-          // create an appropriate geometry and add it to the feature
-          // var coordinate = transform([parseFloat(item.longitude), parseFloat(item.latitude)]);
-          //var coordinate = [parseFloat(item.longitude), parseFloat(item.latitude)];
-          //var geometry = new ol.geom.Point(coordinate);
-         // feature.setGeometry(geometry);
-          // add the feature to the source
-          // flickrSource.addFeature(feature);
-        //  pointLayer.source.addFeature(feature);
-      //});
+
+        var pointLayer = new ol.layer.Vector({
+          name: "pointLayer",
+          source: vectorSource,
+          style: iconStyle
+        }); 
+
+        map.addLayer(pointLayer);
+        map.render();
     }
 
 
     $.ajax({
-      url: 'http://localhost:8000/restaurants/facility_address/51%20FOX%20STREET',
+      /* url: 'http://localhost:8000/restaurants', */
+      /* url: 'http://localhost:8000/restaurants/facility_address/51%20FOX%20STREET', */
+      /* url: 'http://localhost:8000/restaurants/facility_address/148%20TANNERY%20ROAD',*/
+      /* url: 'http://localhost:8000/restaurants/facility_city/UTICA', */
+      url: 'http://localhost:8000/restaurants/circle/42.095128,-76.064429,236.4',
       dataType: 'json',
       success: successHandler
      });

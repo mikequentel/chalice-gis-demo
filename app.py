@@ -123,8 +123,10 @@ def facility(facility):
 @app.route('/restaurants/facility_address/{facility_address}', methods=['GET'], cors=True)
 def facility_address(facility_address):
   facility_address = urllib.unquote(facility_address)
-  sql = "SELECT * FROM restaurants WHERE facility_address = %s"
+  sql = "SELECT * FROM restaurants WHERE facility_address LIKE %s"
+  # sql = "SELECT * FROM restaurants_subset WHERE facility_address LIKE %s"
   query = cursor.mogrify(sql, (facility_address,))
+  print query
   cursor.execute(query)
   records = cursor.fetchall()
   return {'results':json.dumps(records, default=json_serial)}

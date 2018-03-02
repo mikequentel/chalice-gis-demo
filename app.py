@@ -27,20 +27,21 @@ def json_serial(obj):
 @app.route('/restaurants/limit/{limit}', methods=['GET'], cors=True)
 def limit(limit):
   cursor = conn.cursor(cursor_factory=RealDictCursor)
-  limit = urllib.unquote(limit)
-  sql = "SELECT * FROM restaurants LIMIT %s"
+  limit = long(urllib.unquote(limit))
+  sql = "SELECT * FROM restaurants"
   query = cursor.mogrify(sql, (limit,))
   print query
   cursor.execute(query)
-  records = cursor.fetchall()
+  # records = cursor.fetchall()
+  records = cursor.fetchmany(limit)
   cursor.close()
   return {'results':json.dumps(records, default=json_serial)}
 
 @app.route('/restaurants/oid/{oid}', methods=['GET'], cors=True)
 def oid(oid):
   cursor = conn.cursor(cursor_factory=RealDictCursor)
-  oid = urllib.unquote(oid)
-  sql = "SELECT * FROM restaurants WHERE oid = %s"
+  oid = long(urllib.unquote(oid))
+  sql = "SELECT * FROM restaurants WHERE oid = %(oid)d"
   query = cursor.mogrify(sql, (oid,))
   print query
   cursor.execute(query)

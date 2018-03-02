@@ -24,10 +24,14 @@ def json_serial(obj):
     return obj.isoformat()
     raise TypeError("Type %s not serializable" % type(obj))
 
-@app.route('/restaurants', methods=['GET'], cors=True)
-def restaurants():
+@app.route('/restaurants/limit/{limit}', methods=['GET'], cors=True)
+def limit(limit):
   cursor = conn.cursor(cursor_factory=RealDictCursor)
-  cursor.execute('SELECT * FROM restaurants LIMIT 100')
+  limit = urllib.unquote(limit)
+  sql = "SELECT * FROM restaurants LIMIT %s"
+  query = cursor.mogrify(sql, (limit,))
+  print query
+  cursor.execute(query)
   records = cursor.fetchall()
   cursor.close()
   return {'results':json.dumps(records, default=json_serial)}

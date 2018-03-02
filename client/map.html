@@ -10,9 +10,26 @@
     <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
   </head>
   <body>
+    <style>
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+    </style>
     <div id="mapDiv" class="map"></div>
-
+    <label id"queryLabel" name="queryLabel">REST URL QUERY: </label>
+    <form id="queryInput" name="queryInput">
+      <select id="querySelect" name="querySelect">
+        <option value="/restaurants/limit/100" selected>/restaurants/limit/100</option>
+        <option value="/restaurants/facility/MIDNIGHT MIKE'S">/restaurants/facility/MIDNIGHT MIKE'S</option>
+        <option value="/restaurants/facility_address/9632 ROUTE 96">/restaurants/facility_address/9632 ROUTE 96</option>
+        <option value="/restaurants/circle/42.095128,-76.064429,290.4">/restaurants/circle/42.095128,-76.064429,290.4</option>
+        <option value="/restaurants/bbox/43.106171,-76.265024,42.000000,-75.000000">/restaurants/bbox/43.106171,-76.265024,42.000000,-75.000000</option>
+      </select>
+      <button id="querySubmit" name="querySubmit" type="button">Run Query</button>
+    </div>
     <script>
+    var service = "http://localhost:8000"
     var source = new ol.source.OSM();
     var layer = new ol.layer.Tile({
       name: "tileLayer",
@@ -35,8 +52,7 @@
       target: "mapDiv",
       view: new ol.View({
         center: ol.proj.fromLonLat([-75.2326641,43.1009031]),
-        /* center: ol.proj.fromLonLat([-76.064429, 42.095128]), */
-        zoom: 8
+        zoom: 7
       })
     });
     var zoomslider = new ol.control.ZoomSlider();
@@ -44,21 +60,24 @@
      
 
     function successHandler(data) {
-      // console.log(data);
       dataString = JSON.stringify(data);
       dataString = dataString.replace(/\\/g,'');
       dataString = dataString.replace(/'\[/g, '[');
       dataString = dataString.replace(/]'/g, ']');
       dataString = dataString.replace(/"\[/g, '[');
-      dataString = dataString.replace(/]"/g, ']');
-      //console.log(dataString);       
+      dataString = dataString.replace(/]"/g, ']');      
       var jsonData = JSON.parse(dataString);  
 
       var vectorSource = new ol.source.Vector({});
+
+      let vectorLayerArray = new Array();
+      map.getLayers().getArray().some(function(layer, i, array) {
+        if (layer instanceof ol.layer.Vector) {
+          map.removeLayer(layer);
+        }
+      }, this);
            
       for (var i = 0; i < jsonData.results.length; i++) {
-        //console.log(jsonData.results[i].latitude);
-        //console.log(jsonData.results[i].longitude);
         var coordinate = [parseFloat(jsonData.results[i].longitude), parseFloat(jsonData.results[i].latitude)];
         var geom = new ol.geom.Point(ol.proj.fromLonLat(coordinate));
         var feature = new ol.Feature({geometry: geom});
@@ -70,21 +89,20 @@
         source: vectorSource,
         style: iconStyle
       }); 
-
+      
       map.addLayer(pointLayer);
       map.render();
     }
 
-
-    $.ajax({
-      url: 'http://localhost:8000/restaurants',
-      /* url: 'http://localhost:8000/restaurants/facility_address/51%20FOX%20STREET', */
-      /* url: 'http://localhost:8000/restaurants/facility_address/148%20TANNERY%20ROAD',*/
-      /* url: 'http://localhost:8000/restaurants/circle/42.095128,-76.064429,236.4', */
-      dataType: 'json',
-      success: successHandler
+    $(document).ready(function(){
+      $("#querySubmit").click(function(){ 
+        $.ajax({
+          url: service + document.queryInput.querySelect.value,
+          dataType: 'json',
+          success: successHandler
+         });
+       });
      });
-
     </script>
 
   </body>

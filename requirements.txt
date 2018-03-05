@@ -2,6 +2,8 @@ botocore==1.8.47
 chalice==1.1.0
 click==6.6
 docutils==0.14
+geographiclib==1.49
+geopy==1.11.0
 jmespath==0.9.3
 psycopg2==2.7.4
 python-dateutil==2.6.1

@@ -1,3 +1,5 @@
+from geographiclib.geodesic import Geodesic
+from geopy.distance import vincenty
 import json
 from datetime import date, datetime
 import math
@@ -5,7 +7,9 @@ import urllib
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from chalice import Chalice
+
 app = Chalice(app_name='chalice-gis-demo')
+app.debug = True
 conn_string = "host='localhost' dbname='businesses' user='postgres' password='postgres'"
 conn = psycopg2.connect(conn_string)
 
@@ -75,17 +79,35 @@ def circle(circle):
   coords = circle.split(",")
   centre_lat = float(coords[0])
   centre_lon = float(coords[1])
-  radius = float(coords[2])
+  # radius input is in km but needs to be converted to metres for geographiclib
+  radius = float(coords[2]) * 1000.0
   # SQL for determining lat and lon values within a circle, transcribed
   # from example by Chris Veness ((c) 2008-2016)
   # https://www.movable-type.co.uk/scripts/latlong-db.html
-  sql = "SELECT *, ACOS(SIN(RADIANS(%s)) * SIN(RADIANS(latitude)) + COS(RADIANS(%s)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude - ABS(%s)))) * %s AS D FROM restaurants WHERE ACOS(SIN(RADIANS(%s)) * SIN(RADIANS(latitude)) + COS(RADIANS(%s)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude - ABS(%s)))) * %s < %s"
-  query = cursor.mogrify(sql, (centre_lat, centre_lat, centre_lon, CONST.EARTH_MEAN_RADIUS, centre_lat, centre_lat, centre_lon, CONST.EARTH_MEAN_RADIUS, radius))
-  print query
+  # sql = "SELECT *, ACOS(SIN(RADIANS(%s)) * SIN(RADIANS(latitude)) + COS(RADIANS(%s)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude - ABS(%s)))) * %s AS D FROM restaurants WHERE ACOS(SIN(RADIANS(%s)) * SIN(RADIANS(latitude)) + COS(RADIANS(%s)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude - ABS(%s)))) * %s < %s"
+  # query = cursor.mogrify(sql, (centre_lat, centre_lat, centre_lon, CONST.EARTH_MEAN_RADIUS, centre_lat, centre_lat, centre_lon, CONST.EARTH_MEAN_RADIUS, radius))
+  # 
+  # Step 1: determine bounding box of outer circle.
+  # NOTE: geographiclib expects azimuths (bearings) relative to true north (where north is zero).
+  geod = Geodesic.WGS84
+  north_bounding_point = geod.Direct(centre_lat, centre_lon, 0, radius)
+  south_bounding_point = geod.Direct(centre_lat, centre_lon, 180, radius) 
+  east_bounding_point = geod.Direct(centre_lat, centre_lon, 90, radius)
+  west_bounding_point = geod.Direct(centre_lat, centre_lon, 270, radius)
+  sql = "SELECT * FROM restaurants WHERE (latitude BETWEEN %s AND %s) AND (longitude BETWEEN %s AND %s)"
+  query = cursor.mogrify(sql, (south_bounding_point['lat2'], north_bounding_point['lat2'], west_bounding_point['lon2'], east_bounding_point['lon2']))
+  print query  
   cursor.execute(query)
   records = cursor.fetchall()
   cursor.close()
-  return {'results':json.dumps(records, default=json_serial)}
+  # Step 2: iterate through records in bounding box, comparing each distance to radius, selecting whatever is within that distance.
+  items_within_circle = []
+  for rec in records:
+    # Just as geographiclib uses metres, here, for consistency, use metres as well in geopy
+    dist = vincenty((centre_lat, centre_lon), (rec['latitude'], rec['longitude'])).m
+    if dist < radius:
+      items_within_circle.append(rec)
+  return {'results':json.dumps(items_within_circle, default=json_serial)}
 
 @app.route('/restaurants/address/{address}', methods=['GET'], cors=True)
 def address(address):

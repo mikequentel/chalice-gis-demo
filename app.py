@@ -1,3 +1,4 @@
+import os
 from geographiclib.geodesic import Geodesic
 from geopy.distance import vincenty
 import json
@@ -10,7 +11,13 @@ from chalice import Chalice
 
 app = Chalice(app_name='chalice-gis-demo')
 app.debug = True
-conn_string = "host='localhost' dbname='businesses' user='postgres' password='postgres'"
+DB_URL = os.getenv('DB_URL', 'localhost')
+DB_NAME = os.getenv('DB_NAME', 'businesses')
+DB_USER = os.getenv('DB_USER', 'postgres')
+DB_PASSWD = os.getenv('DB_PASSWD', 'postgres')
+
+# conn_string = "host='localhost' dbname='businesses' user='postgres' password='postgres'"
+conn_string = "host=%s dbname=%s user=%s password=%s" % (DB_URL, DB_NAME, DB_USER, DB_PASSWD)
 conn = psycopg2.connect(conn_string)
 
 # CONSTANTS: https://stackoverflow.com/questions/2682745/how-do-i-create-a-constant-in-python

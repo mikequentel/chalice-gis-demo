@@ -32,12 +32,12 @@ def json_serial(obj):
 def limit(limit):
   cursor = conn.cursor(cursor_factory=RealDictCursor)
   limit = long(urllib.unquote(limit))
-  sql = "SELECT * FROM restaurants"
-  query = cursor.mogrify(sql, (limit,))
+  sql = "SELECT * FROM restaurants LIMIT %s"
+  query = cursor.mogrify(sql, (limit, ))
   print query
   cursor.execute(query)
-  # records = cursor.fetchall()
-  records = cursor.fetchmany(limit)
+  records = cursor.fetchall()
+  # records = cursor.fetchmany(limit)
   cursor.close()
   return {'results':json.dumps(records, default=json_serial)}
 
@@ -45,8 +45,8 @@ def limit(limit):
 def oid(oid):
   cursor = conn.cursor(cursor_factory=RealDictCursor)
   oid = long(urllib.unquote(oid))
-  sql = "SELECT * FROM restaurants WHERE oid = %(oid)d"
-  query = cursor.mogrify(sql, (oid,))
+  sql = "SELECT * FROM restaurants WHERE oid = %s"
+  query = cursor.mogrify(sql, (oid, ))
   print query
   cursor.execute(query)
   records = cursor.fetchall()

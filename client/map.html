@@ -7,7 +7,7 @@
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
-    <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
+    <script src="https://openlayers.org/en/v4.6.4/build/ol-debug.js"></script>
   </head>
   <body>
     <style>
@@ -19,17 +19,18 @@
     <div id="mapDiv" class="map"></div>
     <label id"queryLabel" name="queryLabel">REST URL QUERY: </label>
     <form id="queryInput" name="queryInput">
+      <input type="text" id="service" name="service" value="http://localhost:8000"/>
       <select id="querySelect" name="querySelect">
         <option value="/restaurants/limit/100" selected>/restaurants/limit/100</option>
-        <option value="/restaurants/facility/MIDNIGHT MIKE'S">/restaurants/facility/MIDNIGHT MIKE'S</option>
-        <option value="/restaurants/facility_address/9632 ROUTE 96">/restaurants/facility_address/9632 ROUTE 96</option>
-        <option value="/restaurants/circle/42.095128,-76.064429,290.4">/restaurants/circle/42.095128,-76.064429,290.4</option>
+        <option value="/restaurants/oid/1435107">/restaurants/oid/1435107</option>
+        <option value="/restaurants/facility/CIRO'S PLACE">/restaurants/facility/CIRO'S PLACE</option>
+        <option value="/restaurants/county/NASSAU">/restaurants/county/NASSAU</option>
+        <option value="/restaurants/circle/42.095128,-76.064429,136.4">/restaurants/circle/42.095128,-76.064429,136.4</option>
         <option value="/restaurants/bbox/43.106171,-76.265024,42.000000,-75.000000">/restaurants/bbox/43.106171,-76.265024,42.000000,-75.000000</option>
       </select>
       <button id="querySubmit" name="querySubmit" type="button">Run Query</button>
     </div>
     <script>
-    var service = "http://localhost:8000"
     var source = new ol.source.OSM();
     var layer = new ol.layer.Tile({
       name: "tileLayer",
@@ -70,18 +71,22 @@
 
       var vectorSource = new ol.source.Vector({});
 
-      let vectorLayerArray = new Array();
       map.getLayers().getArray().some(function(layer, i, array) {
         if (layer instanceof ol.layer.Vector) {
           map.removeLayer(layer);
         }
       }, this);
-           
+     
       for (var i = 0; i < jsonData.results.length; i++) {
-        var coordinate = [parseFloat(jsonData.results[i].longitude), parseFloat(jsonData.results[i].latitude)];
+        var lon = parseFloat(jsonData.results[i].longitude);
+        var lat = parseFloat(jsonData.results[i].latitude);
+        if (isNaN(lon) || isNaN(lat)) {
+          continue;
+        }
+        var coordinate = [lon, lat];
         var geom = new ol.geom.Point(ol.proj.fromLonLat(coordinate));
-        var feature = new ol.Feature({geometry: geom});
-        vectorSource.addFeature(feature);
+        var ftr = new ol.Feature({geometry:geom});
+        vectorSource.addFeature(ftr);
       }
 
       var pointLayer = new ol.layer.Vector({
@@ -97,7 +102,7 @@
     $(document).ready(function(){
       $("#querySubmit").click(function(){ 
         $.ajax({
-          url: service + document.queryInput.querySelect.value,
+          url: document.queryInput.service.value + document.queryInput.querySelect.value,
           dataType: 'json',
           success: successHandler
          });

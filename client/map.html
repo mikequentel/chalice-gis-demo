@@ -19,14 +19,18 @@
     <div id="mapDiv" class="map"></div>
     <label id"queryLabel" name="queryLabel">REST URL QUERY: </label>
     <form id="queryInput" name="queryInput">
-      <input type="text" id="service" name="service" value="http://localhost:8000"/>
+      <!-- <input type="text" id="service" name="service" value="http://localhost:8000"/> -->
+      <select id="service" name="service">
+        <option value="https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api" selected>https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api</option>
+        <option value="http://localhost:8000">http://localhost:8000</option>
+      </select>
       <select id="querySelect" name="querySelect">
         <option value="/restaurants/limit/100" selected>/restaurants/limit/100</option>
-        <option value="/restaurants/oid/1435107">/restaurants/oid/1435107</option>
-        <option value="/restaurants/facility/CIRO'S PLACE">/restaurants/facility/CIRO'S PLACE</option>
-        <option value="/restaurants/county/NASSAU">/restaurants/county/NASSAU</option>
-        <option value="/restaurants/circle/42.095128,-76.064429,136.4">/restaurants/circle/42.095128,-76.064429,136.4</option>
-        <option value="/restaurants/bbox/43.106171,-76.265024,42.000000,-75.000000">/restaurants/bbox/43.106171,-76.265024,42.000000,-75.000000</option>
+        <option value="/restaurants/oid/1441071">/restaurants/oid/1441071</option>
+        <option value="/restaurants/facility/LITTLE ROMA PIZZA, INC.">/restaurants/facility/LITTLE ROMA PIZZA, INC.</option>
+        <option value="/restaurants/county/ONEIDA">/restaurants/county/ONEIDA</option>
+        <option value="/restaurants/circle/43.1009,-75.2327,236.4">/restaurants/circle/43.1009,-75.2327,236.4</option>
+        <option value="/restaurants/bbox/43.000000,-76.000000,42.000000,-75.000000">/restaurants/bbox/43.000000,-76.000000,42.000000,-75.000000</option>
       </select>
       <button id="querySubmit" name="querySubmit" type="button">Run Query</button>
     </div>

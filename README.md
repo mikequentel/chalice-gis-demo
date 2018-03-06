@@ -10,7 +10,7 @@
     * This is publicly available information published by the US government.
   * The backend database for this demo does not include PostGIS at this time.
 * Connection to database: [psycopg2](http://initd.org/psycopg)
-
+* Circle distance calculation uses the libraries [geographiclib](https://pypi.python.org/pypi/geographiclib) and [geopy](https://pypi.python.org/pypi/geopy)
 
 # Interfaces
 ## Examples of included interfaces--one exists for each field in the database.

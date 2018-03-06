@@ -1,4 +1,7 @@
 # Chalice GIS Demo https://github.com/mikequentel/chalice-gis-demo
+
+![chalice-gis-demo client](doc/img/chalice-gis-demo_2018-03-06.png)
+
 * A reference implementation of a REST-exposed GIS server using AWS Lambda functions generated using Chalice. Includes AWS features such as RDS (for the PostgreSQL database), Lambda (for the FaaS modules), API Gateway for handling requests and responses, VPC (Virtual Private Cloud) which enables proper performance between Lambda and RDS.
 * Article describing this proof-of-concept: *[Create a FaaS REST GIS in AWS using Open Source Tools](https://www.linkedin.com/pulse/create-faas-rest-gis-aws-using-open-source-tools-mike-quentel)*
 * Lambda framework: [Chalice](https://github.com/aws/chalice)

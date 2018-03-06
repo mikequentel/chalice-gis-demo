@@ -18,7 +18,6 @@ DB_PASSWD = os.getenv('DB_PASSWD', 'postgres')
 
 # conn_string = "host='localhost' dbname='businesses' user='postgres' password='postgres'"
 conn_string = "host=%s dbname=%s user=%s password=%s" % (DB_URL, DB_NAME, DB_USER, DB_PASSWD)
-print "conn_string: " + str(conn_string)
 conn = psycopg2.connect(conn_string)
 
 # CONSTANTS: https://stackoverflow.com/questions/2682745/how-do-i-create-a-constant-in-python

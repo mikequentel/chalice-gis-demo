@@ -18,6 +18,7 @@ DB_PASSWD = os.getenv('DB_PASSWD', 'postgres')
 
 # conn_string = "host='localhost' dbname='businesses' user='postgres' password='postgres'"
 conn_string = "host=%s dbname=%s user=%s password=%s" % (DB_URL, DB_NAME, DB_USER, DB_PASSWD)
+print "conn_string: " + str(conn_string)
 conn = psycopg2.connect(conn_string)
 
 # CONSTANTS: https://stackoverflow.com/questions/2682745/how-do-i-create-a-constant-in-python
@@ -28,6 +29,10 @@ class CONST(object):
     pass
 
 CONST = CONST()
+
+@app.route('/introspect')
+def introspect():
+  return app.current_request.to_dict()
 
 # https://stackoverflow.com/questions/11875770/how-to-overcome-datetime-datetime-not-json-serializable
 def json_serial(obj):
@@ -44,7 +49,6 @@ def limit(limit):
   print query
   cursor.execute(query)
   records = cursor.fetchall()
-  # records = cursor.fetchmany(limit)
   cursor.close()
   return {'results':json.dumps(records, default=json_serial)}
 

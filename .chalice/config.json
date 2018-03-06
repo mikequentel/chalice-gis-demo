@@ -10,7 +10,7 @@
     "DB_URL": "businesses.cgpffrtgerxw.us-east-1.rds.amazonaws.com",
     "DB_NAME": "businesses",
     "DB_USER": "mikequentel",
-    "DB_PASSWD": "postgresdilb3rt"
+    "DB_PASSWD": "postgres"
   }
 }
 

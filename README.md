@@ -13,6 +13,10 @@
 * Circle distance calculation uses the libraries [geographiclib](https://pypi.python.org/pypi/geographiclib) and [geopy](https://pypi.python.org/pypi/geopy)
 
 # Interfaces
+## Note about the REST interfaces
+* At this time, the interfaces are GET (read-only) actions, especially since the proof-of-concept is being publicly hosted.
+* The documentation for Chalice framework includes information on how to include other REST operations such as POST, PUT, and DELETE
+
 ## Examples of included interfaces--one exists for each field in the database.
 * Select top (limit) of items **/restaurants/limit/{limit}** eg: https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api/restaurants/limit/100
 * Select by object ID **/restaurants/oid/{oid}** eg: https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api/restaurants/oid/1441071

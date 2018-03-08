@@ -2,13 +2,14 @@
 
 ![chalice-gis-demo client](doc/img/chalice-gis-demo_2018-03-06.png)
 
-* A reference implementation of a REST-exposed GIS server using AWS Lambda functions generated using Chalice. Includes AWS features such as RDS (for the PostgreSQL database), Lambda (for the FaaS modules), API Gateway for handling requests and responses, VPC (Virtual Private Cloud) which enables proper performance between Lambda and RDS.
+* A reference implementation of a REST-exposed GIS server using AWS Lambda functions generated using Chalice. Includes AWS features such as RDS (for the PostgreSQL database), Lambda (for the FaaS modules), API Gateway for handling requests and responses, VPC (Virtual Private Cloud) which enables proper performance between Lambda and RDS. It is a proof-of-concept and a demo of how one can implement a FaaS GIS server into AWS. It is not meant to be a robust, production-quality solution, but rather an example and potential starting point for future projects.
 * Article describing this proof-of-concept: *[Create a FaaS REST GIS in AWS using Open Source Tools](https://www.linkedin.com/pulse/create-faas-rest-gis-aws-using-open-source-tools-mike-quentel)*
 * Lambda framework: [Chalice](https://github.com/aws/chalice)
 * Database: [PostgreSQL](https://www.postgresql.org)
   * Based on restaurant inspection data, from several years ago (circa 2013), collected by the state of New York and shared at the USA government website [data.gov](https://www.data.gov)
     * This is publicly available information published by the US government.
   * The backend database for this demo does not include PostGIS at this time.
+  * Contains a flat table named `restaurants`--not a normalised database, for simplicity of the demo.
 * Connection to database: [psycopg2](http://initd.org/psycopg)
 * Circle distance calculation uses the libraries [geographiclib](https://pypi.python.org/pypi/geographiclib) and [geopy](https://pypi.python.org/pypi/geopy)
 
@@ -27,3 +28,22 @@
 
 ## Published on swaggerhub
 * Published at: https://app.swaggerhub.com/apis/9902350canada/restaurants/1.0
+* Swagger was not used to create the API, but nevertheless the API has been published as an FYI at swaggerhub.com from `swagger/chalice-gis-demo-api-swagger.yaml` which was exported from AWS API Gateway.
+* You can ignore the semantic error messages at swaggerhub.com and successfully run tests against the API.
+
+# Hacking
+
+## Prerequisites
+* PostgreSQL
+* Python (version 2.7 was used for the demo but you could use 3 instead)
+* Pip
+* Virtualenv
+* Chalice
+
+## Steps
+1. Clone the Git repository: `git clone https://github.com/mikequentel/chalice-gis-demo.git`
+2. Enable the Virtual Environment (via `virtualenv`): `pip install -r requirements.txt`
+3. Install a local copy of the database `businesses` which contains the table `restaurants` using either the dump file at `data/businesses_backup.tar` or the plain text dump `data/businesses_backup.sql`
+4. Set the appropriate credentials, which set environment variables used to connect to the database, in the file `.chalice/config.json`
+5. Start the server locally by running `chalice local` which will deploy the server to http://localhost:8000
+6. Now, you can run queries against the server through any HTTP client, but most easily through using the example at `client/map.html`

@@ -74,9 +74,9 @@ def bbox(bbox):
   bottom = float(coords[2])
   right = float(coords[3])
   sql = "SELECT * FROM restaurants WHERE (latitude BETWEEN %s AND %s) AND (longitude BETWEEN %s AND %s)"
-  query = cursor.mogrify(sql, (bottom, top, left, right)) 
+  query = cursor.mogrify(sql, (bottom, top, left, right))
   print query
-  cursor.execute(query) 
+  cursor.execute(query)
   records = cursor.fetchall()
   cursor.close()
   return {'results':json.dumps(records, default=json_serial)}
@@ -91,22 +91,16 @@ def circle(circle):
   centre_lon = float(coords[1])
   # radius input is in km but needs to be converted to metres for geographiclib
   radius = float(coords[2]) * 1000.0
-  # SQL for determining lat and lon values within a circle, transcribed
-  # from example by Chris Veness ((c) 2008-2016)
-  # https://www.movable-type.co.uk/scripts/latlong-db.html
-  # sql = "SELECT *, ACOS(SIN(RADIANS(%s)) * SIN(RADIANS(latitude)) + COS(RADIANS(%s)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude - ABS(%s)))) * %s AS D FROM restaurants WHERE ACOS(SIN(RADIANS(%s)) * SIN(RADIANS(latitude)) + COS(RADIANS(%s)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude - ABS(%s)))) * %s < %s"
-  # query = cursor.mogrify(sql, (centre_lat, centre_lat, centre_lon, CONST.EARTH_MEAN_RADIUS, centre_lat, centre_lat, centre_lon, CONST.EARTH_MEAN_RADIUS, radius))
-  # 
   # Step 1: determine bounding box of outer circle.
   # NOTE: geographiclib expects azimuths (bearings) relative to true north (where north is zero).
   geod = Geodesic.WGS84
   north_bounding_point = geod.Direct(centre_lat, centre_lon, 0, radius)
-  south_bounding_point = geod.Direct(centre_lat, centre_lon, 180, radius) 
+  south_bounding_point = geod.Direct(centre_lat, centre_lon, 180, radius)
   east_bounding_point = geod.Direct(centre_lat, centre_lon, 90, radius)
   west_bounding_point = geod.Direct(centre_lat, centre_lon, 270, radius)
   sql = "SELECT * FROM restaurants WHERE (latitude BETWEEN %s AND %s) AND (longitude BETWEEN %s AND %s)"
   query = cursor.mogrify(sql, (south_bounding_point['lat2'], north_bounding_point['lat2'], west_bounding_point['lon2'], east_bounding_point['lon2']))
-  print query  
+  print query
   cursor.execute(query)
   records = cursor.fetchall()
   cursor.close()
@@ -472,7 +466,3 @@ def violation_item(violation_item):
   records = cursor.fetchall()
   cursor.close()
   return {'results':json.dumps(records, default=json_serial)}
-
-
-
-

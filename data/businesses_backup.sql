@@ -23,7 +23,7 @@ SET default_with_oids = true;
 
 --
 -- TOC entry 186 (class 1259 OID 1440566)
--- Name: restaurants; Type: TABLE; Schema: public; Owner: mikequentel
+-- Name: restaurants; Type: TABLE; Schema: public; Owner: postgres 
 --
 
 CREATE TABLE public.restaurants (
@@ -62,12 +62,12 @@ CREATE TABLE public.restaurants (
 );
 
 
-ALTER TABLE public.restaurants OWNER TO mikequentel;
+ALTER TABLE public.restaurants OWNER TO postgres;
 
 --
 -- TOC entry 3039 (class 0 OID 1440566)
 -- Dependencies: 186
--- Data for Name: restaurants; Type: TABLE DATA; Schema: public; Owner: mikequentel
+-- Data for Name: restaurants; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.restaurants (facility, address, date_of_inspection, violation_item, violation_description, critical_violation, total_num_critical_violations, total_num_crit_not_corrected, total_num_noncritical_violations, local_health_department, county, facility_code, facility_address, facility_city, facility_postal_zipcode, nysdoh_gazetteer_1980, facility_municipality, operation_name, permit_expiration_date, food_service_type, food_service_description, permitted_dba, permitted_corp_name, perm_operator_last_name, perm_operator_first_name, nys_health_operation_id, inspection_type, inspector_id, inspection_comments, fs_facility_state, latitude, longitude) WITH OIDS FROM stdin;

@@ -41,14 +41,26 @@
       source: source
     });
 
-    var iconStyle = new ol.style.Style({
-      image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-        color: '#FF00FF',
-        crossOrigin: 'anonymous',
-        opacity: 0.75,
-        src: 'img/dot.png'
-      }))
+    function getIconStyle(labelVal) {
+      var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+          color: '#FF00FF',
+          crossOrigin: 'anonymous',
+          opacity: 0.75,
+          src: 'img/dot.png'
+        })),
+        text: new ol.style.Text({
+          font: '12px Calibri,sans-serif',
+          fill: new ol.style.Fill({ color: '#000' }),
+          stroke: new ol.style.Stroke({
+            color: '#fff', width: 2
+          }),
+          /*text: map.getView().getZoom() > 12 ? labelVal : ''*/
+          text: labelVal
+        })
     });
+    return iconStyle;
+    }
 
     var map = new ol.Map({
       /* project: "EPSG:4326", */
@@ -62,7 +74,6 @@
     });
     var zoomslider = new ol.control.ZoomSlider();
     map.addControl(zoomslider);
-     
 
     function successHandler(data) {
       dataString = JSON.stringify(data);
@@ -70,8 +81,8 @@
       dataString = dataString.replace(/'\[/g, '[');
       dataString = dataString.replace(/]'/g, ']');
       dataString = dataString.replace(/"\[/g, '[');
-      dataString = dataString.replace(/]"/g, ']');      
-      var jsonData = JSON.parse(dataString);  
+      dataString = dataString.replace(/]"/g, ']');
+      var jsonData = JSON.parse(dataString);
 
       var vectorSource = new ol.source.Vector({});
 
@@ -80,7 +91,7 @@
           map.removeLayer(layer);
         }
       }, this);
-     
+
       for (var i = 0; i < jsonData.results.length; i++) {
         var lon = parseFloat(jsonData.results[i].longitude);
         var lat = parseFloat(jsonData.results[i].latitude);
@@ -90,21 +101,22 @@
         var coordinate = [lon, lat];
         var geom = new ol.geom.Point(ol.proj.fromLonLat(coordinate));
         var ftr = new ol.Feature({geometry:geom});
+        var facility = jsonData.results[i].facility;
+        ftr.setStyle(getIconStyle(facility));
         vectorSource.addFeature(ftr);
       }
 
       var pointLayer = new ol.layer.Vector({
         name: "pointLayer",
-        source: vectorSource,
-        style: iconStyle
-      }); 
-      
+        source: vectorSource
+      });
+
       map.addLayer(pointLayer);
       map.render();
     }
 
     $(document).ready(function(){
-      $("#querySubmit").click(function(){ 
+      $("#querySubmit").click(function(){
         $.ajax({
           url: document.queryInput.service.value + document.queryInput.querySelect.value,
           dataType: 'json',

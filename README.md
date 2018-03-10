@@ -47,3 +47,18 @@
 4. Set the appropriate credentials, which set environment variables used to connect to the database, in the file `.chalice/config.json`
 5. Start the server locally by running `chalice local` which will deploy the server to http://localhost:8000
 6. Now, you can run queries against the server through any HTTP client, but most easily through using the example at `client/map.html`
+
+# Deploying to AWS
+
+## Prerequisites
+* Account at Amazon Web Services
+  * Strongly advise that you create an IAM admin account and use it for day-to-day administrative tasks instead of the root account (root account is typically used for initial set up and billing/account settings).
+* Private keys (typically installed at `~/.aws`) -- see the following for how to set up this:
+  * https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html
+  * http://chalice.readthedocs.io/en/latest/quickstart.html
+
+## Steps
+1. Create an AWS RDS database and load it with a PostgreSQL dump (such as the SQL file at `data/businesses_backup.sql`).
+2. Modify the credentials for Chalice at `.chalice/config.json`
+3. Deploy the demo using the command `chalice deploy`
+4. Create a VPC to enable a connection between the resulting AWS Lambda and the RDS. Only need to set this up once. The RDS can be publically accessible but needs the VPC for proper performance; otherwise, the Lambda functions will time-out when attempting to call them through AWS API Gateway. If you are having configuration issues with the VPC and RDS, please see [Troubleshoot Issues Connecting to an RDS Instance](https://aws.amazon.com/premiumsupport/knowledge-center/rds-cannot-connect/)

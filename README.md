@@ -62,3 +62,4 @@
 2. Modify the credentials for Chalice at `.chalice/config.json`
 3. Deploy the demo using the command `chalice deploy`
 4. Create a VPC to enable a connection between the resulting AWS Lambda and the RDS. Only need to set this up once. The RDS can be publically accessible but needs the VPC for proper performance; otherwise, the Lambda functions will time-out when attempting to call them through AWS API Gateway. If you are having configuration issues with the VPC and RDS, please see [Troubleshoot Issues Connecting to an RDS Instance](https://aws.amazon.com/premiumsupport/knowledge-center/rds-cannot-connect/)
+5. The example client can also be deployed to AWS. I recommend using AWS S3 bucket to host a static web page (eg: `client/map.html`), and be sure to CORS-enable the bucket.

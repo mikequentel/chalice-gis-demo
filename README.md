@@ -22,7 +22,7 @@
 * Select top (limit) of items **/restaurants/limit/{limit}** eg: https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api/restaurants/limit/100
 * Select by object ID **/restaurants/oid/{oid}** eg: https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api/restaurants/oid/1441071
 * Select by circle (items within the circle), with parameters latitude, longitude, and radius in km **/restaurants/circle/{circle}** eg: https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api/restaurants/circle/43.1009,-75.2327,150.5
-* Select by bounding box (items within bounding box), with parameters upper left latitude, upper left longitude, lower right latitude, lower right longitude **/restaurants/bbox/43.000000,-79.000000,41.000000,-71.000000** eg: https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api/restaurants/bbox/43.000000,-79.000000,41.000000,-71.000000
+* Select by bounding box (items within bounding box), with parameters upper left latitude, upper left longitude, lower right latitude, lower right longitude **/restaurants/bbox/{bbox}** eg: https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api/restaurants/bbox/43.000000,-79.000000,41.000000,-71.000000
 * Select by facility (restaurant) name **/restaurants/facility/{facility}** eg: https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api/restaurants/facility/LITTLE%20ROMA%20PIZZA,%20INC%2E
 * Select by county containing facilities of interest **/restaurants/county/{county}** eg: https://a4fpsm6md0.execute-api.us-east-1.amazonaws.com/api/restaurants/county/ONEIDA
 
